@@ -12,6 +12,12 @@
       ],
       "@redux/*": [
         "./src/redux/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@comp/*": [
+        "./src/components/*"
       ]
     },
     "baseUrl": ".",

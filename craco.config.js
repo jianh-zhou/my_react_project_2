@@ -7,7 +7,9 @@ module.exports = {
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@api": path.resolve(__dirname, "./src/api"),
       "@utils": path.resolve(__dirname, "./src/utils"),
-      "@redux": path.resolve(__dirname, "./src/redux")
+      "@redux": path.resolve(__dirname, "./src/redux"),
+      "@config": path.resolve(__dirname, "./src/config"),
+      "@comp":path.resolve(__dirname,"./src/components")
     }
   },
   // style样式相关配置

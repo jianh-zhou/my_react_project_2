@@ -1,0 +1,32 @@
+.verify-regist-phone {
+  background-color: #fff;
+}
+.guigi-regist-nav {
+  color: #000;
+  margin-bottom: 30px;
+}
+.back-btn {
+  color: #000;
+}
+.choice-phone-conuntry {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  /* margin-top: 30px; */
+}
+.tipcs {
+  color: #000;
+}
+a.next-step-btn {
+  width: 90%;
+  border-radius: 20px;
+  margin: 30px auto 0;
+}
+strong.imporant-tipcs {
+  /* color: red; */
+  text-decoration: underline;
+}
+.policy {
+  display: block;
+  text-align: left;
+}
