@@ -9,7 +9,8 @@ module.exports = {
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@redux": path.resolve(__dirname, "./src/redux"),
       "@config": path.resolve(__dirname, "./src/config"),
-      "@comp":path.resolve(__dirname,"./src/components")
+      "@comp": path.resolve(__dirname, "./src/components"),
+      "@assets":path.resolve(__dirname,'./src/assets')
     }
   },
   // style样式相关配置

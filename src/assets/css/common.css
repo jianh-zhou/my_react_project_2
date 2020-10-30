@@ -2,3 +2,10 @@ html,
 body {
   background-color: #fff;
 }
+body {
+  font-size: 16px;
+}
+.verify-code-img {
+  background-color: #fff;
+  text-align: center;
+}

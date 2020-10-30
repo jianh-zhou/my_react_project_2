@@ -18,6 +18,9 @@
       ],
       "@comp/*": [
         "./src/components/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
       ]
     },
     "baseUrl": ".",

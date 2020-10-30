@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { NavBar, Icon, InputItem, WingBlank, Modal, Toast } from 'antd-mobile'
+import { NavBar, Icon, InputItem, WingBlank, Modal } from 'antd-mobile'
 import { createForm } from 'rc-form'
 // 引入腾讯验证的插件
 import VerifyBtn from '@comp/VerifyBtn'
 import './index.css'
 import { reqVerifyRegistPhone } from '@api/regist'
+// 引入对应的请求发送验证码的api接口函数
+import { reqSendCode } from '@api/login'
 class Verifyphone extends Component {
   // 组件挂载完毕的生命周期回调函数
   componentDidMount() {
@@ -49,14 +51,14 @@ class Verifyphone extends Component {
   }
   // 进行异步请求验证手机号是否存在的回调函数
   next = async () => {
-    try {
       // 获取手机号码
       const phone = this.props.form.getFieldProps('phone').value
       // console.log(phone)
       await reqVerifyRegistPhone(phone)
-    } catch (err) {
-      Toast.fail(err)
-    }
+      // 发送对应的验证码
+      await reqSendCode(phone)
+      // 跳转到对应的验证验证码的页面
+      this.props.history.push('/regist/verifycode', phone)
   }
   render() {
     const { isDisabled } = this.state
