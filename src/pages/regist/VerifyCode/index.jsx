@@ -10,6 +10,8 @@ import {
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
 import { reqSendCode } from '@api/login'
+// 引入验证验证码的api接口函数
+import { reqVerifyCode } from '@api/regist'
 import './index.css'
 import img from '@assets/imgs/msg.png'
 const TOTAL_TIME = 5
@@ -31,7 +33,7 @@ class VerifyCode extends Component {
   // 定义对应的计时器
   setTimer = () => {
     this.timer = setInterval(() => {
-      console.log(1)
+      // console.log(1)
       const time = this.state.time - 1
       if (time < 1) {
         clearInterval(this.timer)
@@ -79,7 +81,7 @@ class VerifyCode extends Component {
     // 设置对应的手机号码验证规则正则表达式
     const reg = /^\d{6}$/
     let isDisabled = true
-    console.log(1111)
+    // console.log(1111)
     if (reg.test(value)) {
       console.log(2222)
       isDisabled = false
@@ -88,6 +90,18 @@ class VerifyCode extends Component {
       isDisabled,
     })
     callback()
+  }
+
+  // 点击按钮,进行验证手机验证码
+  goSetPassword = async () => {
+    // 收集到表单中的手机号和验证码
+    const { code } = this.props.form.getFieldsValue()
+    const phone = this.props.location.state
+    console.log(phone, code)
+    //发送对应请求,请求手机号和验证码是否正确
+    await reqVerifyCode(phone, code)
+    // 跳转到对应的密码设置的页面
+    this.props.history.push('/regist/verifypassword', phone)
   }
   render() {
     const { getFieldProps } = this.props.form
@@ -125,7 +139,11 @@ class VerifyCode extends Component {
             {isShow ? `重新发送: ${time}s` : '获取验证码'}{' '}
           </Button>
         </div>
-        <Button className="verify-code-nextStep" disabled={isDisabled}>
+        <Button
+          className="verify-code-nextStep"
+          disabled={isDisabled}
+          onClick={this.goSetPassword}
+        >
           下一步
         </Button>
         <p className="verify-code-tip">

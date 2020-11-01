@@ -14,3 +14,23 @@
 span.iconfont {
   font-size: 24px;
 }
+.setPasswordTip {
+  color: #999;
+  padding: 0 30px;
+}
+.passwordStDone.am-button {
+  background-color: red;
+  border-radius: 30px;
+  /* padding-top: 40px; */
+  margin: 40px auto 20px;
+  width: 86%;
+  text-align: center;
+  color: #fff;
+}
+.query {
+  padding-left: 40px;
+  color: #888;
+}
+.query span {
+  color: blue;
+}

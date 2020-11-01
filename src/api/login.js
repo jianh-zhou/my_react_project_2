@@ -6,3 +6,10 @@ export const reqSendCode = (phone) => request({
   url: `${path}/digits`,
   data: { phone }
 })
+
+// // 设置密码后的api接口函数
+// export const reqPasswordToLogin = (phone, password) => request({
+//   method: 'POST',
+//   url: `${path}/user`,
+//   data: { phone, password }
+// })

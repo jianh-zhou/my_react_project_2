@@ -23,8 +23,8 @@ request.interceptors.response.use((response) => {
   if (response.data.code === 20000) {
     return response.data.data
   } else {
-    // return Promise.reject(response.data.messages)
-    Toast.fail(response.data.messages)
+    Toast.fail(response.data.message, 3)
+    return Promise.reject(response.data.message)
   }
 }, (err) => {
   let message = '未找到相关错误,请联系管理员'
@@ -39,8 +39,8 @@ request.interceptors.response.use((response) => {
       message = "网络延迟，请打开4/5G网络或WIFI试试";
     }
   }
-  // return Promise.reject(message)
-  Toast.fail(message)
+  Toast.fail(message, 3)
+  return Promise.reject(message)
 })
 // 暴露这个二次封装的axios
 export default request
