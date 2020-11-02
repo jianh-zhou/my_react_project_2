@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { connect } from 'react-redux'
+// 引入对应的action
+import { getUserInfoSave } from '@redux/actions'
 import {
   NavBar,
   Icon,
@@ -6,19 +10,71 @@ import {
   WhiteSpace,
   Button,
   Toast,
-} from "antd-mobile";
-import { Link } from "react-router-dom";
-import { createForm } from "rc-form";
+} from 'antd-mobile'
 
-import "./index.css";
+import { Link } from 'react-router-dom'
+import { createForm } from 'rc-form'
+// 引入验证手机号码和密码的正则表达式
+import { passwordReg, phoneReg } from '@utils/reg'
+import './index.css'
 
-function PasswordLogin({ form: { getFieldProps } }) {
- 
-
+function PasswordLogin({
+  form: { getFieldProps, getFieldsValue },
+  getUserInfoSave,
+  history,
+}) {
+  // 定义对应的数据状态
+  const [phoneAndPassword, setPhoneAndPassword] = useState({
+    checkPhone: true,
+    checkPassword: true,
+  })
+  // 定义一个状态用来改变密码的显示与影藏
+  const [changePasswordView, setChangePasswordView] = useState(false)
+  // 表单的校验规则
   const validator = (rule, value, callback) => {
-    callback();
-  }
+    let { checkPhone, checkPassword } = phoneAndPassword
+    // 判断校验的是不是手机号
+    if (rule.field === 'phone') {
+      // console.log(1);
+      checkPhone = true
+      if (phoneReg.test(value)) {
+        checkPhone = false
+      }
+    } else if (rule.field === 'password') {
+      checkPassword = true
+      if (passwordReg.test(value)) {
+        checkPassword = false
+      }
+    }
+    setPhoneAndPassword({
+      ...phoneAndPassword,
+      checkPhone,
+      checkPassword,
+    })
 
+    callback()
+  }
+  // 点击进行切换密码的显示方式
+  const change = () => {
+    setChangePasswordView(!changePasswordView)
+  }
+  //登录按钮的点击事件
+  const toLoginByPassword = async () => {
+    // console.log(1);
+    // 获取手机号和密码
+    const { phone, password } = getFieldsValue()
+    // console.log(password, phone)
+    try {
+      const token = await getUserInfoSave(phone, password)
+      // 将返回的token值设置为浏览器缓存
+      window.localStorage.setItem('userToken', token)
+      // 跳转到主页
+      history.push('/')
+    } catch (e) {
+      Toast.fail(e, 3)
+    }
+  }
+  const { checkPhone, checkPassword } = phoneAndPassword
   return (
     <div className="login container">
       <NavBar
@@ -33,7 +89,7 @@ function PasswordLogin({ form: { getFieldProps } }) {
         <InputItem
           clear
           placeholder="用户名/邮箱/手机号"
-          {...getFieldProps("phone", {
+          {...getFieldProps('phone', {
             rules: [
               {
                 validator,
@@ -44,7 +100,7 @@ function PasswordLogin({ form: { getFieldProps } }) {
         <WhiteSpace size="lg" />
         <div className="login-code">
           <InputItem
-            {...getFieldProps("password", {
+            {...getFieldProps('password', {
               rules: [
                 {
                   validator,
@@ -53,18 +109,19 @@ function PasswordLogin({ form: { getFieldProps } }) {
             })}
             clear
             placeholder="请输入密码"
-            type="password"
+            type={!changePasswordView ? 'password' : 'text'}
             extra={
               <span
+                onTouchEnd={change}
                 className={
-                  "iconfont icon-eye1"
+                  'iconfont ' + (!changePasswordView ? 'icon-eye1' : 'icon-eye')
                 }
               ></span>
             }
           />
           <button
             className="login-btn-text login-btn"
-            style={{ color: "#000" }}
+            style={{ color: '#000' }}
           >
             忘记密码
           </button>
@@ -74,6 +131,8 @@ function PasswordLogin({ form: { getFieldProps } }) {
           <Button
             type="warning"
             className="warning-btn"
+            disabled={checkPhone || checkPassword}
+            onClick={toLoginByPassword}
           >
             登录
           </Button>
@@ -104,7 +163,7 @@ function PasswordLogin({ form: { getFieldProps } }) {
         </span>
       </WingBlank>
     </div>
-  );
+  )
 }
 
-export default createForm()(PasswordLogin);
+export default connect(null, { getUserInfoSave })(createForm()(PasswordLogin))

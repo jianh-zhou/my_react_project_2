@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { Toast } from 'antd-mobile'
+// 引入store
+import store from '@redux/store'
 const messages = {
   401: '没有权限,请登录后再进行访问',
   403: '禁止访问',
   404: '服务器找不到相关资源'
 }
+
+// 获取token
+const token = store.getState().user.token
 // 调用create方法,相当于生成一个实例
 const request = axios.create({
   baseURL: '/',//请求头的地址
@@ -13,9 +18,9 @@ const request = axios.create({
 })
 // 设置请求拦截
 request.interceptors.request.use((config) => {
-  // if (token) {
-  //   config.headers[auth] = `Bearer${token}`
-  // }
+  if (token) {
+    config.headers['autherization'] = `Bearer${token}`
+  }
   return config
 })
 // 设置响应拦截
@@ -23,7 +28,7 @@ request.interceptors.response.use((response) => {
   if (response.data.code === 20000) {
     return response.data.data
   } else {
-    Toast.fail(response.data.message, 3)
+    // Toast.fail(response.data.message, 3)
     return Promise.reject(response.data.message)
   }
 }, (err) => {

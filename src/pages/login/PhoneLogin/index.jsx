@@ -14,6 +14,10 @@ import { createForm } from 'rc-form'
 import { reqSendCode } from '@api/login'
 // 引入对应的正则表达式
 import { phoneReg, codeReg } from '@utils/reg'
+// 引入手机号登录的api接口函数
+import { reqPhoneToLogin } from '@api/login'
+// 引入手机号是否存在的api接口函数
+import { reqVerifyRegistPhone, reqVerifyCode } from '@api/regist'
 import './index.css'
 const TIME_TOTAL = 5
 class Login extends Component {
@@ -78,10 +82,30 @@ class Login extends Component {
   componentWillUnmount() {
     clearInterval(this.timer)
   }
+
+  // 登录的事件回调函数
+  toLoginByPhone = async () => {
+    // 获取手机号,和输入的密码
+    const { phone, code } = this.props.form.getFieldsValue()
+    //
+    try {
+      await reqVerifyRegistPhone(phone)
+      // 手机号么有注册过,则跳转到对应的设置密码的界面
+      // 验证验证码是否正确
+      await reqVerifyCode(phone, code)
+      this.props.history.push('/regist/verifypassword', phone)
+    } catch (e) {
+      // 手机号注册过
+      await reqPhoneToLogin(phone, code).then(() => {
+        // 跳转到主页
+        this.props.history.push('/')
+      })
+    }
+  }
   render() {
     const { getFieldProps } = this.props.form
     const { checkCode, checkPhone, isSendCode, timeout } = this.state
-    // console.log(checkPhone, checkCode) 
+    // console.log(checkPhone, checkCode)
     return (
       <div className="login container">
         <NavBar
@@ -140,6 +164,7 @@ class Login extends Component {
               className="warning-btn"
               disabled={checkPhone || checkCode}
               // disabled={false}
+              onClick={this.toLoginByPhone}
             >
               登录
             </Button>

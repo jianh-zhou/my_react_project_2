@@ -23,7 +23,7 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  content: "";
+  content: '';
   display: block;
   height: 24px;
   width: 1px;
@@ -47,7 +47,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  content: "";
+  content: '';
   display: block;
   height: 1px;
   width: 90px;
@@ -116,4 +116,7 @@
   .login-other-text::after {
     transform: scaleY(0.3333) translateY(-50%);
   }
+}
+.warning-btn.am-button {
+  border-radius: 30px;
 }
